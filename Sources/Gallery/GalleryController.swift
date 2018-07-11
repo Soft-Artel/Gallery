@@ -4,7 +4,6 @@ import AVFoundation
 public protocol GalleryControllerDelegate: class {
 
   func galleryController(_ controller: GalleryController, didSelectImages images: [Image])
-  func galleryController(_ controller: GalleryController, didSelectVideo video: Video)
   func galleryController(_ controller: GalleryController, requestLightbox images: [Image])
   func galleryControllerDidCancel(_ controller: GalleryController)
 }
@@ -39,6 +38,11 @@ public class GalleryController: UIViewController, PermissionControllerDelegate {
       g_addChildController(permissionController)
     }
   }
+    
+    public override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        self.navigationController?.setNavigationBarHidden(true, animated: false)
+    }
 
   public override var prefersStatusBarHidden : Bool {
     return true
@@ -60,12 +64,12 @@ public class GalleryController: UIViewController, PermissionControllerDelegate {
     return controller
   }
 
-  func makeVideosController() -> VideosController {
-    let controller = VideosController(cart: cart)
-    controller.title = "Gallery.Videos.Title".g_localize(fallback: "VIDEOS")
-
-    return controller
-  }
+//  func makeVideosController() -> VideosController {
+//    let controller = VideosController(cart: cart)
+//    controller.title = "Gallery.Videos.Title".g_localize(fallback: "VIDEOS")
+//
+//    return controller
+//  }
 
   func makePagesController() -> PagesController? {
     guard Permission.Photos.status == .authorized else {
@@ -74,15 +78,15 @@ public class GalleryController: UIViewController, PermissionControllerDelegate {
 
     let useCamera = Permission.Camera.needsPermission && Permission.Camera.status == .authorized
 
-    let tabsToShow = Config.tabsToShow.compactMap { $0 != .cameraTab ? $0 : (useCamera ? $0 : nil) }
+    let tabsToShow = Config.tabsToShow.flatMap { $0 != .cameraTab ? $0 : (useCamera ? $0 : nil) }
 
-    let controllers: [UIViewController] = tabsToShow.compactMap { tab in
+    let controllers: [UIViewController] = tabsToShow.flatMap { tab in
       if tab == .imageTab {
         return makeImagesController()
       } else if tab == .cameraTab {
         return makeCameraController()
-      } else if tab == .videoTab {
-        return makeVideosController()
+//      } else if tab == .videoTab {
+//        return makeVideosController()
       } else {
         return nil
       }
@@ -120,11 +124,11 @@ public class GalleryController: UIViewController, PermissionControllerDelegate {
       }
     }
 
-    EventHub.shared.doneWithVideos = { [weak self] in
-      if let strongSelf = self, let video = strongSelf.cart.video {
-        strongSelf.delegate?.galleryController(strongSelf, didSelectVideo: video)
-      }
-    }
+//    EventHub.shared.doneWithVideos = { [weak self] in
+//      if let strongSelf = self, let video = strongSelf.cart.video {
+//        strongSelf.delegate?.galleryController(strongSelf, didSelectVideo: video)
+//      }
+//    }
 
     EventHub.shared.stackViewTouched = { [weak self] in
       if let strongSelf = self {

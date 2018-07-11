@@ -11,7 +11,6 @@ public protocol CartDelegate: class {
 public class Cart {
 
   public var images: [Image] = []
-  public var video: Video?
   var delegates: NSHashTable<AnyObject> = NSHashTable.weakObjects()
 
   // MARK: - Initialization
@@ -59,7 +58,7 @@ public class Cart {
   // MARK: - Reset
 
   public func reset() {
-    video = nil
+//    video = nil
     images.removeAll()
     delegates.removeAllObjects()
   }

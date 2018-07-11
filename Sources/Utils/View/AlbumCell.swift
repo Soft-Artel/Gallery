@@ -8,7 +8,7 @@ class AlbumCell: UITableViewCell {
 
   // MARK: - Initialization
 
-    override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
+  override init(style: UITableViewCellStyle, reuseIdentifier: String?) {
     super.init(style: style, reuseIdentifier: reuseIdentifier)
 
     setup()
@@ -34,7 +34,7 @@ class AlbumCell: UITableViewCell {
 
   func setup() {
     [albumImageView, albumTitleLabel, itemCountLabel].forEach {
-        addSubview($0)
+      addSubview($0 as! UIView)
     }
 
     albumImageView.g_pin(on: .left, constant: 12)

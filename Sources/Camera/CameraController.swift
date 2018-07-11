@@ -24,8 +24,7 @@ class CameraController: UIViewController {
   // MARK: - Life cycle
 
   override func viewDidLoad() {
-    super.viewDidLoad()
-
+    super.viewDidLoad()    
     setup()
     setupLocation()
   }
