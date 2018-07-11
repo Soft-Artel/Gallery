@@ -194,7 +194,11 @@ class CameraMan {
     queue.async {
       self.lock {
         device.focusPointOfInterest = point
-      }
+        device.focusMode = .autoFocus
+        
+        device.exposurePointOfInterest = point
+        device.exposureMode = .continuousAutoExposure
+        }
     }
   }
 
